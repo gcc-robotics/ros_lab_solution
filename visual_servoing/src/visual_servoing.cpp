@@ -31,6 +31,97 @@ visual_servoing::visual_servoing(ros::NodeHandle rosNode)
 	this->clickedPoint = cv::Point();
 }
 
+/**
+	Function that takes in vector of Object objects and openCV Mat image
+
+	@param	object	std::vector<Object>
+	@param	&frame	cv::Mat
+	@return	void
+*/
+void drawRobot(Object object, Mat &frame)
+{
+	int x = object.getXPos();
+	int y = object.getYPos();
+
+	cv::circle(frame, cv::Point(x, y),5, cv::Scalar(0, 0, 255));
+	cv::circle(frame, cv::Point(x, y), 40, cv::Scalar(0, 255, 0));
+	cv::putText(frame, intToString(x)+ " , " 
+				+ intToString(y), cv::Point(x, y + 20), 1, 1,Scalar(0, 255, 0));
+	cv::putText(frame, object.getType(), cv::Point(x, y - 30)
+				, 1 , 2, object.getColor());
+}
+
+/**
+	Function to erode and dilate whitespace
+
+	@param	&thresh	cv::Mat
+	@return	void
+*/
+void morphOps(Mat &thresh)
+{
+	Mat erodeElement = getStructuringElement( MORPH_RECT,Size(4,4));
+	Mat dilateElement = getStructuringElement( MORPH_RECT,Size(10,10));
+
+	erode(thresh,thresh,erodeElement);
+	erode(thresh,thresh,erodeElement);
+
+	dilate(thresh,thresh,dilateElement);
+	dilate(thresh,thresh,dilateElement);
+}
+
+/**
+	Function to be used with calibrate node for tracking objects
+
+	@param	threshold	cv::Mat
+	@param	HSV			cv::Mat
+	@param	&cameraFeed	cv::Mat
+	@return	void
+*/
+void trackRobot(Object robot, Mat threshold, Mat HSV, Mat &cameraFeed)
+{
+	cv::Mat temp;
+	threshold.copyTo(temp);
+	std::vector< std::vector<Point> > contours;
+	std::vector<Vec4i> hierarchy;
+	cv::findContours(temp, contours, hierarchy, CV_RETR_CCOMP, CV_CHAIN_APPROX_SIMPLE);
+
+	double refArea = 0;
+	bool objectFound = false;
+	if (hierarchy.size() > 0)
+	{
+		for (int index = 0; index >= 0; index = hierarchy[index][0])
+		{
+			Moments moment = moments((cv::Mat)contours[index]);
+			double area = moment.m00;
+
+			if(area > MIN_OBJECT_AREA)
+			{
+
+				robot.setXPos(moment.m10/area);
+				robot.setYPos(moment.m01/area);
+			
+				objectFound = true;
+
+			}
+			else
+			{
+				objectFound = false;
+			}
+		}
+	
+		if(objectFound ==true)
+		{
+			
+			drawRobot(robot,cameraFeed);
+		}
+
+		else
+		{
+			putText(cameraFeed,"TOO MUCH NOISE! ADJUST FILTER", Point(0, 50), 1, 1, Scalar(0, 0, 255), 2);
+		}
+	}
+}
+
 void visual_servoing::processImage(const sensor_msgs::ImageConstPtr& msg)
 {
 	// Convert the ROS image to an OpenCV Image
@@ -57,9 +148,9 @@ void visual_servoing::processImage(const sensor_msgs::ImageConstPtr& msg)
 	inRange(HSV,Scalar(H_MIN,S_MIN,V_MIN),Scalar(H_MAX,S_MAX,V_MAX), threshold);
 	morphOps(threshold);
 	imshow(windowName2,threshold);
-	trackRobot(threshold,HSV,cv_ptr->image);
+	trackRobot(this->robot, threshold,HSV,cv_ptr->image);
 	cv::setMouseCallback("Original Image", mouseEventCallback, &(this->clickedPoint));
-	
+
 	// Draw target point
 	if(this->clickedPoint.x != -1 && this->clickedPoint.y != -1)
 	{
