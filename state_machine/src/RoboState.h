@@ -1,0 +1,32 @@
+#include "ros/ros.h"
+#include <cmath>
+#include "geometry_msgs/Twist.h"
+#include <unistd.h>
+
+
+#ifndef __RoboState_H_
+#define __RoboState_H_
+
+
+class RoboState
+{
+	private:
+		ros::NodeHandle node;
+		geometry_msgs::Twist velocityCommand;
+		ros::Publisher velocityPublisher;
+		geometry_msgs::Twist command;
+		ros::Subscriber bumperSubscriber;
+		bool rightBumperState;
+		bool leftBumperState;
+
+	public:
+		RoboState(ros::NodeHandle rosNode);
+		void goForward();
+		void goBackward();
+		void rotateLeft();
+		void checkBumper();
+		void bumperCallback();
+		void goRobotGo();
+};
+
+#endif
