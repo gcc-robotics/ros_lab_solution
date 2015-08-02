@@ -22,6 +22,7 @@ class RoboState
 	public:
 		RoboState(ros::NodeHandle rosNode);
 		void goForward();
+		void checkWall();
 		void goBackward();
 		void rotateLeft();
 		void checkBumper();
