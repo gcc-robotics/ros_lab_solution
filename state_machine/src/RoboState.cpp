@@ -70,7 +70,38 @@ void RoboState::checkBumper()
 
 }
 
-void RoboState::bumperCallback()
+void RoboState::bumperCallback(const create_node::TurtlebotSensorState::ConstPtr& msg)
 {
+	if(msg->bumps_wheeldrops == 1)
+	{
+		rightBumperState = true;
+		leftBumperState = false;
+	}
+	else if(msg->bumps_wheeldrops == 2)
+	{
+		rightBumperState = false;
+		leftBumperState = true;
+	}
+	else if(msg->bumps_wheeldrops == 3)
+	{
+		rightBumperState = true;
+		leftBumperState = true;
+	}
+	else
+	{
+		rightBumperState = false;
+		leftBumperState = false;
+	}
+}
 
+void RoboState::goRobotGo()
+{
+	goFoward();
+	turnRight();
+	goFoward();
+	turnRight();
+	goFoward();
+	turnRight();
+	goFoward();
+	turnRight();
 }

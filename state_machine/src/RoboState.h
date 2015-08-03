@@ -2,7 +2,7 @@
 #include <cmath>
 #include "geometry_msgs/Twist.h"
 #include <unistd.h>
-
+#include "create_node/TurtlebotSensorState.h"
 
 #ifndef __RoboState_H_
 #define __RoboState_H_
@@ -26,7 +26,7 @@ class RoboState
 		void goBackward();
 		void rotateLeft();
 		void checkBumper();
-		void bumperCallback();
+		void bumperCallback(const create_node::TurtlebotSensorState::ConstPtr& msg);
 		void goRobotGo();
 };
 
