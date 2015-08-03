@@ -3,19 +3,19 @@
 #include <string.h>
 #include "ros/ros.h"
 #include "geometry_msgs/Twist.h"
-#include "Lab3.cpp"
+#include "RoboState.cpp"
 
 int main(int argc, char **argv)
 {
 	// Start Node
-	ROS_INFO("Starting irobot_node");
+	ROS_INFO("Starting state machine node");
 
 	ros::init(argc, argv, "irobot");
 	ros::NodeHandle node;
 	geometry_msgs::Twist cmd_vel;
 	int counter = 1;
 
-	Irobot robot = Irobot(node);
+	RoboState robot = RoboState(node);
 
 	ROS_INFO("Press Ctrl-C to kill node.");
 
@@ -27,7 +27,7 @@ int main(int argc, char **argv)
 		if(counter == 1)
 		{
 			robot.goRobotGo();
-			coutner++;
+			counter++;
 		}
 		
 		ros::spinOnce();

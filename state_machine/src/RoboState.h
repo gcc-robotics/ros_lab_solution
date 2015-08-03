@@ -25,6 +25,7 @@ class RoboState
 		void checkWall();
 		void goBackward();
 		void rotateLeft();
+		void rotateRight();
 		void checkBumper();
 		void bumperCallback(const create_node::TurtlebotSensorState::ConstPtr& msg);
 		void goRobotGo();

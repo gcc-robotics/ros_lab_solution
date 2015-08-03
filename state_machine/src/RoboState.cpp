@@ -1,19 +1,14 @@
 #include "RoboState.h"
 
-/**
-	Constructor for Irobot class
 
-	@param	rosNode	ros::NodeHandle
-	@return			void
-*/
 RoboState::RoboState(ros::NodeHandle rosNode)
 {
 	this->node = rosNode;
 	this->velocityPublisher = this->node.advertise<geometry_msgs::Twist>("/mobile_base/commands/velocity", 1);
-	this->bumperSubscriber = this->node.subscribe("/mobile_base/sensors/core", 1, RoboState::bumperCallback);
+	this->bumperSubscriber = this->node.subscribe("/mobile_base/sensors/core", 1, &RoboState::bumperCallback, this);
 }
 
-void RoboState::goFoward()
+void RoboState::goForward()
 {
 	this->velocityCommand.linear.x = 1.0;
 	this->velocityCommand.angular.z = 0.0;
@@ -57,11 +52,11 @@ void RoboState::checkBumper()
 {
 	if(rightBumperState)
 	{
-		turnLeft();
+		rotateLeft();
 	}
 	else if(leftBumperState)
 	{
-		turnRight();
+		rotateRight();
 	}
 	else
 	{
@@ -96,12 +91,12 @@ void RoboState::bumperCallback(const create_node::TurtlebotSensorState::ConstPtr
 
 void RoboState::goRobotGo()
 {
-	goFoward();
-	turnRight();
-	goFoward();
-	turnRight();
-	goFoward();
-	turnRight();
-	goFoward();
-	turnRight();
+	goForward();
+	rotateRight();
+	goForward();
+	rotateRight();
+	goForward();
+	rotateRight();
+	goForward();
+	rotateRight();
 }

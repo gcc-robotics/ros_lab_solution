@@ -1,0 +1,8 @@
+prefix=/usr/local
+
+Name: state_machine
+Description: Description of state_machine
+Version: 0.0.0
+Cflags: -I/usr/local/include
+Libs: -L/usr/local/lib -lstate_machine
+Requires: roscpp std_msgs
