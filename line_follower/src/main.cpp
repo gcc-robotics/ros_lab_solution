@@ -3,7 +3,7 @@
 #include <string.h>
 #include "ros/ros.h"
 #include "geometry_msgs/Twist.h"
-#include "RoboState.cpp"
+#include "RoboSensor.cpp"
 
 int main(int argc, char **argv)
 {
@@ -15,7 +15,7 @@ int main(int argc, char **argv)
 	geometry_msgs::Twist cmd_vel;
 	int counter = 1;
 
-	RoboState robot = RoboState(node);
+	RoboSensor robot = RoboSensor(node);
 
 	ROS_INFO("Press Ctrl-C to kill node.");
 

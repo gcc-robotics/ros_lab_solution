@@ -5,7 +5,7 @@ RoboSensor::RoboSensor(ros::NodeHandle rosNode)
 {
 	this->node = rosNode;
 	this->velocityPublisher = this->node.advertise<geometry_msgs::Twist>("/mobile_base/commands/velocity", 1);
-	this->bumperSubscriber = this->node.subscribe("/mobile_base/sensors/core", 1, &RoboSensor::bumperCallback, this);
+	this->irSubscriber = this->node.subscribe("/mobile_base/sensors/core", 1, &RoboSensor::irCallback, this);
 }
 
 void RoboSensor::goForward()
@@ -40,14 +40,39 @@ void RoboSensor::rotateRight()
 	velocityPublisher.publish(this->velocityCommand);
 }
 
+void RoboSensor::checkIrSensor()
+{
+	if(farLeftIrSensor < 100 && farLeftIrSensor > 50)
+	{
+		rotateLeft();
+	}
+	else if(leftIrSensor < 100 && leftIrSensor > 50)
+	{
+		rotateLeft();
+	}
+	else if(farRightIrSensor < 100 && farRightIrSensor > 50)
+	{
+		rotateRight();
+	}
+	else if(rightIrSensor < 100 && rightIrSensor > 50)
+	{
+		rotateRight();
+	}
+	else
+	{
+		goForward();
+	}
+}
+
+void RoboSensor::irCallback(const create_node::TurtlebotSensorState::ConstPtr& msg)
+{
+	farLeftIrSensor = msg->IRSENSOR;
+	farRightIrSensor = msg->IRSENSOR;
+	leftIrSensor = msg->IRSENSOR;
+	rightIrSensor = msg->IRSENSOR;
+}
+
 void RoboSensor::goRobotGo()
 {
-	goForward();
-	rotateRight();
-	goForward();
-	rotateRight();
-	goForward();
-	rotateRight();
-	goForward();
-	rotateRight();
+	checkIrSensor();
 }

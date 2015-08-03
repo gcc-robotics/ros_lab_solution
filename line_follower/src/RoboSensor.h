@@ -15,9 +15,11 @@ class RoboSensor
 		geometry_msgs::Twist velocityCommand;
 		ros::Publisher velocityPublisher;
 		geometry_msgs::Twist command;
-		ros::Subscriber bumperSubscriber;
-		bool rightIR;
-		bool leftIR;
+		ros::Subscriber irSubscriber;
+		int farLeftIrSensor;
+		int leftIrSensor;
+		int farRightIrSensor;
+		int rightIrSensor;
 
 	public:
 		RoboSensor(ros::NodeHandle rosNode);
@@ -26,6 +28,7 @@ class RoboSensor
 		void rotateLeft();
 		void rotateRight();
 		void checkIR();
+		void irThreshold();
 		void irCallback(const create_node::TurtlebotSensorState::ConstPtr& msg);
 		void goRobotGo();
 };
