@@ -205,20 +205,24 @@ void visual_servoing::processImage(const sensor_msgs::ImageConstPtr& msg)
 	cv::setMouseCallback("Original Image", mouseEventCallback, &(this->clickedPoint));
 
 	//Robot's position over time
-	int roboXPos = this->robot.getXPos();
-	int roboYPos = this->robot.getYPos();
+	int robotX = this->robot.getXPos();
+	int robotY = this->robot.getYPos();
+	int clickedX = (int)this->clickedPoint.x;
+	int clickedY = (int)this->clickedPoint.y;
 
 	// Draw target point
-	if(this->clickedPoint.x != -1 && this->clickedPoint.y != -1)
+	if(clickedX != -1 && clickedY != -1)
 	{
-		cv::circle(cv_ptr->image, cv::Point(this->clickedPoint.x, this->clickedPoint.y), 5, cv::Scalar(255, 0, 0));
-		cv::putText(cv_ptr->image, intToString(this->clickedPoint.x)+ " , " 
-				+ intToString(this->clickedPoint.y), cv::Point(this->clickedPoint.x, this->clickedPoint.y + 20), 1, 1,Scalar(255, 0, 0));
+		cv::circle(cv_ptr->image, cv::Point(clickedX, clickedY), 5, cv::Scalar(255, 0, 0));
+		cv::putText(cv_ptr->image, intToString(clickedX)+ " , " 
+				+ intToString(clickedY), cv::Point(clickedX, clickedY + 20), 1, 1,Scalar(255, 0, 0));
 	}
 
-/*
-	
-*/
+	// Calculate deltas
+
+	int delta_x = robotX - clickedX;
+	int delta_y = robotY - clickedY;
+
 
 	imshow(windowName,cv_ptr->image);
 	waitKey(3);
