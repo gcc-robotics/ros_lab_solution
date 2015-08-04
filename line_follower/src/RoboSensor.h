@@ -20,6 +20,7 @@ class RoboSensor
 		int leftIrSensor;
 		int farRightIrSensor;
 		int rightIrSensor;
+		int counter;
 
 	public:
 		RoboSensor(ros::NodeHandle rosNode);
@@ -28,6 +29,8 @@ class RoboSensor
 		void rotateLeft();
 		void rotateRight();
 		void checkIR();
+		void checkForLap();
+		void finishLoop();
 		void irThreshold();
 		void irCallback(const create_node::TurtlebotSensorState::ConstPtr& msg);
 		void goRobotGo();
