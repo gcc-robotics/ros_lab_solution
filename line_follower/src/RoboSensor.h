@@ -28,7 +28,7 @@ class RoboSensor
 		void goBackward();
 		void rotateLeft();
 		void rotateRight();
-		void checkIR();
+		void checkIrSensor();
 		void checkForLap();
 		void finishLoop();
 		void irThreshold();
