@@ -12,21 +12,9 @@ int main(int argc, char **argv)
 	ros::init(argc, argv, "visual_servoing");
 	ros::NodeHandle node;
 
-	// Start trash detector
-	visual_servoing c = visual_servoing(node);
+	// Start visual servoing
+	visual_servoing vs = visual_servoing(node);
 	ROS_INFO("Press Ctrl-C to kill node.");
-
-	// Spin
-	// ros::Rate loopRate(10); // 10 hz
-
-	// while(ros::ok())
-	// {
-	// 	// Do other things?
-
-	// 	// ROS Spin & Sleep
-	// 	ros::spinOnce();
-	// 	loopRate.sleep();
-	// }
 
 	ros::spin();
 

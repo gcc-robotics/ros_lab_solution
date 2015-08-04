@@ -1,8 +1,0 @@
-prefix=/home/sb161/ros_labs_ws/src/lab_solution/state_machine/devel
-
-Name: state_machine
-Description: Description of state_machine
-Version: 0.0.0
-Cflags: -I/home/sb161/ros_labs_ws/src/lab_solution/state_machine/src
-Libs: -L/home/sb161/ros_labs_ws/src/lab_solution/state_machine/devel/lib -lstate_machine
-Requires: roscpp std_msgs
