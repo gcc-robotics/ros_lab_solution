@@ -27,7 +27,6 @@ int main(int argc, char **argv)
 		if(counter == 1)
 		{
 			robot.goRobotGo();
-			counter++;
 		}
 		
 		ros::spinOnce();
