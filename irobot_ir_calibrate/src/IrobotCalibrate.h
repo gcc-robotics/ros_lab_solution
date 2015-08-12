@@ -6,6 +6,8 @@
 #include <iostream>
 #include <stdio.h>
 
+#include <mgl2/mgl.h>
+
 #ifndef __IROBOT_CALIBRATE_H_
 #define __IROBOT_CALIBRATE_H_
 
@@ -36,10 +38,10 @@ class IrobotCalibrate
 		int currentFarRightIrSensor;
 
 		// Data History
-		int* leftIrSensorData;
-		int* farLeftIrSensorData;
-		int* rightIrSensorData;
-		int* farRightIrSensorData;
+		int *leftIrSensorData;
+		int *farLeftIrSensorData;
+		int *rightIrSensorData;
+		int *farRightIrSensorData;
 
 	public:
 		IrobotCalibrate(ros::NodeHandle rosNode);
@@ -48,6 +50,7 @@ class IrobotCalibrate
 		void spinOnce();
 		void storeCurrentData();
 		void generateGraphs();
+		void generateSingleGraph(mglGraph *graph, int* data, int position, char* name);
 
 		void irCallback(const create_node::TurtlebotSensorState::ConstPtr& msg);
 };
